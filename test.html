@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Викторина: Физика на полосе препятствий</title>
+    <!-- Подключаем стильные и современные шрифты -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lora:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --accent: #f59e0b;
+            --text: #2c3e50;
+            --bg: #f0f4f8;
+            --white: #ffffff;
+            --success: #2ecc71;
+            --error: #e74c3c;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6; 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .quiz-card { 
+            background: var(--white); 
+            border-radius: 24px; 
+            padding: 3rem 2.5rem; 
+            max-width: 600px; 
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .quiz-header { text-align: center; margin-bottom: 2.5rem; }
+        .quiz-title { font-family: 'Lora', serif; font-size: 2.4rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .quiz-subtitle { font-size: 1.05rem; color: #64748b; font-weight: 500; }
+        
+        .question-box { display: none; }
+        .question-box.active { display: block; }
+        
+        .q-text { font-size: 1.25rem; font-weight: 600; margin-bottom: 1.8rem; color: var(--primary); line-height: 1.4; }
+        
+        .options-list { list-style: none; padding: 0; }
+        .option-btn { 
+            display: block; width: 100%; padding: 1.1rem 1.4rem; margin-bottom: 0.9rem; 
+            background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; 
+            text-align: left; font-size: 1rem; cursor: pointer; font-family: 'Montserrat', sans-serif;
+            font-weight: 500; transition: all 0.2s ease; color: var(--text);
+        }
+        .option-btn:hover { background: #f1f5f9; border-color: var(--primary); transform: translateY(-1px); }
+        
+        /* Блок итоговых результатов */
+        #result-box { display: none; text-align: center; }
+        .result-title { font-family: 'Lora', serif; font-size: 2.8rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary); }
+        .result-text { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+        .score-text { font-size: 1.1rem; color: #64748b; margin-bottom: 1.5rem; }
+        
+        /* Линии статуса */
+        .result-line { height: 8px; width: 100%; border-radius: 4px; margin: 2rem 0; display: block; }
+        .line-green { background-color: var(--success); box-shadow: 0 4px 14px rgba(46, 204, 113, 0.4); }
+        .line-red { background-color: var(--error); box-shadow: 0 4px 14px rgba(231, 76, 60, 0.4); }
+        
+        .restart-btn { 
+            display: inline-block; background: var(--primary); color: var(--white); 
+            padding: 1rem 2.5rem; font-size: 1.05rem; font-weight: 600; border: none; 
+            border-radius: 30px; cursor: pointer; transition: 0.3s; margin-top: 1rem;
+            font-family: 'Montserrat', sans-serif; box-shadow: 0 4px 14px rgba(30, 58, 138, 0.2);
+        }
+        .restart-btn:hover { background: var(--accent); color: var(--primary); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-card">
+        <div class="quiz-header">
+            <div class="quiz-title">Проверь себя</div>
+            <div class="quiz-subtitle">Ответь на 5 вопросов о физике на полосе препятствий</div>
+        </div>
+
+        <!-- Вопрос 1 -->
+        <div class="question-box active" id="q1">
+            <div class="q-text">Вопрос 1. Опора на буме</div>
+            <ul class="options-list">
+                <li><button class="option-btn" onclick="nextQuestion(1, false)">А) Увеличивается, так как лапы стоят шире</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(1, true)">Б) Уменьшается, так как площадь опоры, ограниченная лапами, сужается</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(1, false)">В) Не меняется совсем</button></li>
+            </ul>
+        </div>
+
+        <!-- Вопрос 2 -->
+        <div class="question-box" id="q2">
+            <div class="q-text">Вопрос 2. Зачем собаке хвост?</div>
+            <ul class="options-list">
+                <li><button class="option-btn" onclick="nextQuestion(2, false)">А) Только для красоты и выражения эмоций</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(2, true)">Б) Как балансир, вращая им для создания момента силы и смещения центра масс в нужную сторону</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(2, false)">В) Для ускорения бега по прямой</button></li>
+            </ul>
+        </div>
+
+        <!-- Вопрос 3 -->
+        <div class="question-box" id="q3">
+            <div class="q-text">Вопрос 3. Центр масс при приземлении</div>
+            <ul class="options-list">
+                <li><button class="option-btn" onclick="nextQuestion(3, false)">А) Собака может полностью изменить траекторию полёта в воздухе без усилий</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(3, false)">Б) Траектория зависит от направления ветра</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(3, true)">В) Положение центра масс относительно тела меняется, но траектория его полёта подчиняется только силе тяжести</button></li>
+            </ul>
+        </div>
+
+        <!-- Вопрос 4 -->
+        <div class="question-box" id="q4">
+            <div class="q-text">Вопрос 4. Спуск с наклонной доски</div>
+            <ul class="options-list">
+                <li><button class="option-btn" onclick="nextQuestion(4, false)">А) Чтобы быстрее скатиться вниз и сэкономить время</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(4, true)">Б) Чтобы понизить центр тяжести и не дать вектору силы тяжести выйти за пределы площади опоры</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(4, false)">В) Собака делает это случайно из-за усталости</button></li>
+            </ul>
+        </div>
+
+        <!-- Вопрос 5 -->
+        <div class="question-box" id="q5">
+            <div class="q-text">Вопрос 5. Физика когтей и сцепления</div>
+            <ul class="options-list">
+                <li><button class="option-btn" onclick="nextQuestion(5, false)">А) Когти уменьшают трение, помогая скользить</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(5, true)">Б) Они увеличивают силу трения покоя, превращая её в силу зацепления</button></li>
+                <li><button class="option-btn" onclick="nextQuestion(5, false)">В) Они нужны только на травяном покрытии</button></li>
+            </ul>
+        </div>
+
+        <!-- Блок результатов -->
+        <div id="result-box">
+            <div class="result-title">Результат</div>
+            <div id="result-line-element" class="result-line"></div>
+            <div class="result-text" id="result-message">Текст</div>
+            <div class="score-text" id="score-text">0 из 5</div>
+            <button class="restart-btn" onclick="restartQuiz()">Пройти еще раз</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+
+        function nextQuestion(currentNum, isCorrect) {
+            if (isCorrect) { score++; }
+            
+            document.getElementById('q' + currentNum).classList.remove('active');
+            let nextNum = currentNum + 1;
+            let nextQuestionBox = document.getElementById('q' + nextNum);
+            
+            if (nextQuestionBox) {
+                nextQuestionBox.classList.add('active');
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('q1').parentNode.querySelector('.quiz-header').style.display = 'none';
+            
+            const resultBox = document.getElementById('result-box');
+            const resultLine = document.getElementById('result-line-element');
+            const resultMessage = document.getElementById('result-message');
+            const scoreText = document.getElementById('score-text');
+            
+            scoreText.innerText = "Вы правильно ответили на " + score + " из 5 вопросов.";
+            
+            if (score > 3) {
+                resultMessage.innerText = "Молодец!";
+                resultMessage.style.color = "var(--success)";
+                resultLine.className = "result-line line-green";
+            } else {
+                resultMessage.innerText = "В другой раз у тебя все получится.";
+                resultMessage.style.color = "var(--error)";
+                resultLine.className = "result-line line-red";
+            }
+            
+            resultBox.style.display = 'block';
+        }
+
+        function restartQuiz() {
+            score = 0;
+            document.getElementById('q1').parentNode.querySelector('.quiz-header').style.display = 'block';
+            document.getElementById('result-box').style.display = 'none';
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('q' + i).classList.remove('active');
+            }
+            document.getElementById('q1').add('active');
+        }
+    </script>
+
+</body>
+</html>
